@@ -25,7 +25,7 @@ import tdrstyle_all as TDR
 from CrossSectionRunner import *
 from GensimRunner import *
 
-processName = ['BtoDstarTauNu'] # TODO: set production name 
+processName = ['SecondProduction'] # TODO: set production name 
 mlqs_lqlq_sm     = [1000, 1400, 1800, 2200, 2600]
 # mchs_exp_lqlq_sm = [2.0, 2.33, 2.66, 3.0, 3.33, 3.66, 4.0, 4.33]
 # mchs_exp_lqlq_sm = [2.0, 2.66, 3.33, 4.0, 4.33]
@@ -85,78 +85,78 @@ folderstructure = {
         'cmsswtag':        cmssw_tag,
         'jobnametag':      'gensim',
         'outfilenamebase': 'GENSIM',
-        'pathtag':         'GENSIM/BtoDsarTauNu'
+        'pathtag':         'GENSIM/BtoDstarTauNu'
     },
     'DR': {
         'pset':            psetfolder+'/step2.py',
         'cmsswtag':        cmssw_tag,
         'jobnametag':      'dr',
         'outfilenamebase': 'DR',
-        'infilepathtag':   'GENSIM/BtoDsarTauNu',
+        'infilepathtag':   'GENSIM/BtoDstarTauNu',
         'infilenamebase':  'GENSIM',
-        'pathtag':         'DR/BtoDsarTauNu' # TODO: fix typo 
+        'pathtag':         'DR/BtoDstarTauNu' 
     },
 #    'HLT': {
 #        'pset':            psetfolder+'/pset_04_hlt.py',
 #        'cmsswtag':        cmssw_tag_hlt,
 #        'jobnametag':      'hlt',
 #        'outfilenamebase': 'HLT',
-#        'infilepathtag':   'DR/BtoDsarTauNu',
+#        'infilepathtag':   'DR/BtoDstarTauNu',
 #        'infilenamebase':  'DR',
-#        'pathtag':         'HLT/BtoDsarTauNu'
+#        'pathtag':         'HLT/BtoDstarTauNu'
 #    },
     'AOD': {
         'pset':            psetfolder+'/step3.py',
         'cmsswtag':        cmssw_tag,
         'jobnametag':      'aod',
         'outfilenamebase': 'AOD',
-        'infilepathtag':   'DR/BtoDsarTauNu',
+        'infilepathtag':   'DR/BtoDstarTauNu',
         'infilenamebase':  'DR',
-        'pathtag':         'AOD/BtoDsarTauNu'
+        'pathtag':         'AOD/BtoDstarTauNu'
     },
     'MINIAOD': {
         'pset':            psetfolder+'/step4.py',
         'cmsswtag':        cmssw_tag,
         'jobnametag':      'miniaod',
         'outfilenamebase': 'MINIAOD',
-        'infilepathtag':   'AOD/BtoDsarTauNu',
+        'infilepathtag':   'AOD/BtoDstarTauNu',
         'infilenamebase':  'AOD',
-        'pathtag':         'MINIAOD/BtoDsarTauNu'
+        'pathtag':         'MINIAOD/BtoDstarTauNu'
     },
 #    'NANOAOD': {
 #        'pset':            psetfolder+'/pset_07_nanoaod.py',
 #        'cmsswtag':        cmssw_tag,
 #        'jobnametag':      'nanoaod',
 #        'outfilenamebase': 'NANOAOD',
-#        'infilepathtag':   'MINIAOD/BtoDsarTauNu',
+#        'infilepathtag':   'MINIAOD/BtoDstarTauNu',
 #        'infilenamebase':  'MINIAOD',
-#        'pathtag':         'NANOAOD/BtoDsarTauNu'
+#        'pathtag':         'NANOAOD/BtoDstarTauNu'
 #    },
     # 'FLAT': {
     #     'pset':            psetfolder+'/pset_08_flat.py',
     #     'cmsswtag':        cmssw_tag,
     #     'jobnametag':      'flat',
     #     'outfilenamebase': 'FLAT',
-    #     'infilepathtag':   'NANOAOD/BtoDsarTauNu',
+    #     'infilepathtag':   'NANOAOD/BtoDstarTauNu',
     #     'infilenamebase':  'NANOAOD',
-    #     'pathtag':         'FLAT/BtoDsarTauNu'
+    #     'pathtag':         'FLAT/BtoDstarTauNu'
     # },
 #    'Tuples_GENSIM': {
 #        'jobnametag':      'tuples_gensim',
 #        'cmsswtag':        cmssw_tag,
 #        'outfilenamebase': 'Tuples_GENSIM',
-#        'infilepathtag':   'GENSIM/BtoDsarTauNu',
+#        'infilepathtag':   'GENSIM/BtoDstarTauNu',
 #        'infilenamebase':  'GENSIM',
-#        'pathtag':         'Tuples_GENSIM/BtoDsarTauNu',
+#        'pathtag':         'Tuples_GENSIM/BtoDstarTauNu',
 #        'tuplizer':        'Tuplizer'
 #    },
 #    'Tuples_NANOAOD': {
 #        'jobnametag':      'tuples_nanoaod',
 #        'cmsswtag':        cmssw_tag,
 #        'outfilenamebase': 'Tuples_NANOAOD',
-#        # 'infilepathtag':   'FLAT/BtoDsarTauNu',
+#        # 'infilepathtag':   'FLAT/BtoDstarTauNu',
 #        # 'infilenamebase':  'FLAT',
-#        'pathtag':         'Tuples_NANOAOD/BtoDsarTauNu',
+#        'pathtag':         'Tuples_NANOAOD/BtoDstarTauNu',
 #        'tuplizer':        'Tuplizer_NANOAOD'
 #    }
 
@@ -177,12 +177,12 @@ EventGenerator_lqlq_sm = GensimRunner(processnames=processName, tag=tag, workdir
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='GENSIM', ncores=2, runtime=(3,00), mode='new')
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='GENSIM', ncores=8, runtime=(3,00), mode='resubmit')
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='DR', ncores=8, runtime=(10,00), mode='new')
-#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='DR', ncores=8, runtime=(18,00), mode='resubmit')
+EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='DR', ncores=8, runtime=(18,00), mode='resubmit')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='HLT', ncores=8, runtime=(10,00), mode='new')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='HLT', ncores=8, runtime=(10,00), mode='resubmit')
 # EventGenerator_lqlq_sm.RemoveSamples(generation_step='DR')
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='AOD', ncores=4, runtime=(10,00), mode='new')
-EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='AOD', ncores=4, runtime=(10,00), mode='resubmit')
+#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='AOD', ncores=4, runtime=(10,00), mode='resubmit')
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='MINIAOD', ncores=2, runtime=(5,00), mode='new')
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='MINIAOD', ncores=2, runtime=(5,00), mode='resubmit')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='NANOAOD', ncores=1, runtime=(1,00), mode='new')
