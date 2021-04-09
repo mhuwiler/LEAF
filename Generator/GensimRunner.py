@@ -23,12 +23,12 @@ import tdrstyle_all as TDR
 
 
 class GensimRunner:
-    def __init__(self, processnames, tag, configs, lambdas, preferred_configurations, workdir_slurm, workarea, basefolder, cardfolder, mgfolder, gensimfolder, gridpackfolder, arch_tag, cmssw_tag_gp, T2_director, T2_path, T2_director_root, T3_director, T3_path, campaign, folderstructure, maxindex=100, nevents=1000, submit=False):
+    def __init__(self, processnames, tag,workdir_slurm, workarea, basefolder, cardfolder, mgfolder, gensimfolder, gridpackfolder, arch_tag, cmssw_tag_gp, T2_director, T2_path, T2_director_root, T3_director, T3_path, campaign, folderstructure, maxindex=100, nevents=1000, submit=False):
         self.processnames = processnames
         self.tag = tag
-        self.configs = configs
-        self.lambdas = lambdas
-        self.preferred_configurations = preferred_configurations
+        #self.configs = configs
+        #self.lambdas = lambdas
+        #self.preferred_configurations = preferred_configurations
         self.workdir_slurm = workdir_slurm
         self.workarea = workarea
         self.basefolder = basefolder
@@ -141,64 +141,54 @@ class GensimRunner:
 
         # Create command file for array of jobs
         for processname in self.processnames:
-            allowed_configs = []
-            for config in self.configs:
-                if not is_config_excluded_for_process(config=config, processname=processname, preferred_configurations=self.preferred_configurations):
-                    allowed_configs.append(config)
+            # if num > 0: break
+            # num += 1
+            jobname = processname
+            # resubs = ['LQLQToBTau_MLQ1360_MPS4843_MC14467_L1p0', 'LQLQToPsiChi_MLQ1000_MPS244_MC1214_L1p0', 'LQLQToPsiChi_MLQ2170_MPS117_MC1100_Lbest', 'PsiPsiToLQChi_MLQ7030_MPS244_MC1214_L1p0']
+            # if not jobname in resubs: continue
+            commandfilename = commandfilebase + jobname + '.txt'
+            f = open(commandfilename, 'w')
+            indices = -1
+            if mode is 'new':
+                indices = range(self.maxindex)
+            elif mode is 'resubmit':
+                print green('--> Now checking for missing files on T2 for generation step \'%s\' of job \'%s\'...' % (generation_step, jobname))
+                indices = missing_indices = findMissingFilesT2(filepath=self.T2_director+self.T2_path+'/'+self.folderstructure[generation_step]['pathtag']+'/'+jobname, filename_base=self.folderstructure[generation_step]['outfilenamebase'], maxindex=self.maxindex, gensimfolder=self.gensimfolder, generation_step=generation_step)
+
+            njobs = 0
+            for i in indices:
+                outfilename = '%s_%i.root' % (self.folderstructure[generation_step]['outfilenamebase'], i+1)
+                command = ''
+                if generation_step is not 'GENSIM':
+                    infilename   = self.T2_director+self.T2_path+'/'+self.folderstructure[generation_step]['infilepathtag']+'/'+jobname+'/%s_%i.root' % (self.folderstructure[generation_step]['infilenamebase'], i+1)
+                    command = getcmsRunCommand(pset=self.folderstructure[generation_step]['pset'], infilename=infilename, outfilename=outfilename, N=self.nevents, ncores=ncores)
                 else:
-                    print yellow('Skip config %s for process \'%s\'' % (config, processname))
-            # num = 0
-            for config in allowed_configs:
-                for lamb in self.lambdas:
-                    # if num > 0: break
-                    # num += 1
-                    mlq, mps, mch = get_mlq_mps_mch(preferred_configurations=self.preferred_configurations, config=config)
-                    jobname       = get_jobname(processname=processname, mlq=mlq, mps=mps, mch=mch, lamb=lamb, tag=self.tag)
-                    # resubs = ['LQLQToBTau_MLQ1360_MPS4843_MC14467_L1p0', 'LQLQToPsiChi_MLQ1000_MPS244_MC1214_L1p0', 'LQLQToPsiChi_MLQ2170_MPS117_MC1100_Lbest', 'PsiPsiToLQChi_MLQ7030_MPS244_MC1214_L1p0']
-                    # if not jobname in resubs: continue
-                    commandfilename = commandfilebase + jobname + '.txt'
-                    f = open(commandfilename, 'w')
-                    indices = -1
-                    if mode is 'new':
-                        indices = range(self.maxindex)
-                    elif mode is 'resubmit':
-                        print green('--> Now checking for missing files on T2 for generation step \'%s\' of job \'%s\'...' % (generation_step, jobname))
-                        indices = missing_indices = findMissingFilesT2(filepath=self.T2_director+self.T2_path+'/'+self.folderstructure[generation_step]['pathtag']+'/'+jobname, filename_base=self.folderstructure[generation_step]['outfilenamebase'], maxindex=self.maxindex, gensimfolder=self.gensimfolder, generation_step=generation_step)
+                    infilename   = ""
+                    command = getcmsRunCommand(pset=self.folderstructure[generation_step]['pset'], gridpack=infilename, outfilename=outfilename, N=self.nevents, ncores=ncores)
 
-                    njobs = 0
-                    for i in indices:
-                        outfilename = '%s_%i.root' % (self.folderstructure[generation_step]['outfilenamebase'], i+1)
-                        command = ''
-                        if generation_step is not 'GENSIM':
-                            infilename   = self.T2_director+self.T2_path+'/'+self.folderstructure[generation_step]['infilepathtag']+'/'+jobname+'/%s_%i.root' % (self.folderstructure[generation_step]['infilenamebase'], i+1)
-                            command = getcmsRunCommand(pset=self.folderstructure[generation_step]['pset'], infilename=infilename, outfilename=outfilename, N=self.nevents, ncores=ncores)
-                        else:
-                            infilename   = self.gridpackfolder + '/' + processname + '/' + jobname + '_' + self.arch_tag + '_' + self.cmssw_tag_gp + '_tarball.tar.xz'
-                            command = getcmsRunCommand(pset=self.folderstructure[generation_step]['pset'], gridpack=infilename, outfilename=outfilename, N=self.nevents, ncores=ncores)
+                f.write(command + '\n')
+                njobs += 1
 
-                        f.write(command + '\n')
-                        njobs += 1
+            f.close()
+            slurmjobname = ''
+            if mode is 'new':        slurmjobname = '%s' % (self.folderstructure[generation_step]['jobnametag'])
+            elif mode is 'resubmit': slurmjobname = 'resubmit_%s' % (self.folderstructure[generation_step]['jobnametag'])
+            # jobs_per_sample_string = '%10' if mode == 'new' else ''
+            command = 'sbatch -a 1-%s -J %s -p %s -t %s --cpus-per-task %i submit_cmsRun_command.sh %s %s %s %s %s' % (str(njobs), slurmjobname+'_'+jobname, queue, runtime_str, ncores, self.gensimfolder, self.arch_tag, self.workarea+'/'+self.folderstructure[generation_step]['cmsswtag'], self.T2_director+self.T2_path+'/'+self.folderstructure[generation_step]['pathtag']+'/'+jobname, commandfilename)
+            if njobs > 0:
+                if self.submit:
+                    # print command
+                    os.system(command)
+                    print green("  --> Submitted an array of %i jobs for name %s"%(njobs, jobname))
+                else:
+                    print command
+                    print yellow("  --> Would submit an array of %i jobs"%(njobs))
 
-                    f.close()
-                    slurmjobname = ''
-                    if mode is 'new':        slurmjobname = '%s' % (self.folderstructure[generation_step]['jobnametag'])
-                    elif mode is 'resubmit': slurmjobname = 'resubmit_%s' % (self.folderstructure[generation_step]['jobnametag'])
-                    # jobs_per_sample_string = '%10' if mode == 'new' else ''
-                    command = 'sbatch -a 1-%s -J %s -p %s -t %s --cpus-per-task %i submit_cmsRun_command.sh %s %s %s %s %s' % (str(njobs), slurmjobname+'_'+jobname, queue, runtime_str, ncores, self.gensimfolder, self.arch_tag, self.workarea+'/'+self.folderstructure[generation_step]['cmsswtag'], self.T2_director+self.T2_path+'/'+self.folderstructure[generation_step]['pathtag']+'/'+jobname, commandfilename)
-                    if njobs > 0:
-                        if self.submit:
-                            # print command
-                            os.system(command)
-                            print green("  --> Submitted an array of %i jobs for name %s"%(njobs, jobname))
-                        else:
-                            print command
-                            print yellow("  --> Would submit an array of %i jobs"%(njobs))
-
-                    else:
-                        if mode is 'resubmit':
-                            print green('  --> No jobs to resubmit.')
-                        else:
-                            print green('  --> No jobs to submit.')
+            else:
+                if mode is 'resubmit':
+                    print green('  --> No jobs to resubmit.')
+                else:
+                    print green('  --> No jobs to submit.')
 
 
 

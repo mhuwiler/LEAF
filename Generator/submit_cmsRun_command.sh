@@ -3,12 +3,12 @@
 # Settings for SLURM
 #
 #SBATCH --account=t3
-#SBATCH --chdir /work/areimers/workdir_slurm
+#SBATCH --chdir /work/mhuwiler/software/Analysis/leaf/workdir_slurm
 #SBATCH -e %x-%A-%a.err
 #SBATCH -o %x-%A-%a.out
 #SBATCH --export NONE
 #SBATCH --mail-type FAIL
-#SBATCH --mail-user arne.reimers@physik.uzh.ch
+#SBATCH --mail-user marc.huwiler@uzh.ch
 
 echo HOME:                $HOME
 echo USER:                $USER
