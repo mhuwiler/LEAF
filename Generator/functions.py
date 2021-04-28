@@ -234,9 +234,9 @@ def findMissingFilesT2(filepath, filename_base, maxindex, gensimfolder, generati
     filename_base = filepath+'/'+filename_base
     min_size = 0
     if generation_step is 'GENSIM':
-        min_size = 1E7
+        min_size = 1E4
     elif generation_step is 'DR':
-        min_size = 1E9
+        min_size = 1E5
     for idx in range(maxindex):
         filename = filename_base + '_' + str(idx+1) + '.root'
         # print 'didn\'t find file %s, going to try to open it' % (filename)
