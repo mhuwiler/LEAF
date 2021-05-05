@@ -25,7 +25,7 @@ import tdrstyle_all as TDR
 from CrossSectionRunner import *
 from GensimRunner import *
 
-processName = ['SecondProduction'] # TODO: set production name 
+processName = ['SixthProduction'] # TODO: set production name 
 mlqs_lqlq_sm     = [1000, 1400, 1800, 2200, 2600]
 # mchs_exp_lqlq_sm = [2.0, 2.33, 2.66, 3.0, 3.33, 3.66, 4.0, 4.33]
 # mchs_exp_lqlq_sm = [2.0, 2.66, 3.33, 4.0, 4.33]
@@ -49,8 +49,8 @@ lambdas_psipsi  = [1.0] # to reasonable precision, the Psi->LQ+DM decay kinemati
 
 
 tag = ''                # tags are auto-formatted to '_XXXX'
-maxindex        = 100   # Number of samples per configuration
-nevents         = 1000  # Events per sample
+maxindex        = 4999   # Number of samples per configuration #TODO: put here 1000
+nevents         = 300000  # Events per sample
 
 
 username       =  os.environ['USER']
@@ -174,16 +174,16 @@ EventGenerator_lqlq_sm = GensimRunner(processnames=processName, tag=tag, workdir
 # EventGenerator_lqlq_sm.ProduceCards()
 # EventGenerator_lqlq_sm.SubmitGridpacks()
 # EventGenerator_lqlq_sm.MoveGridpacks()
-#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='GENSIM', ncores=2, runtime=(3,00), mode='new')
-#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='GENSIM', ncores=8, runtime=(3,00), mode='resubmit')
-#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='DR', ncores=8, runtime=(10,00), mode='new')
-EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='DR', ncores=8, runtime=(18,00), mode='resubmit')
+#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='GENSIM', ncores=1, runtime=(48,00), mode='new') # could in principle be decreased by a factor 4 (or the num of events per job increased)
+EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='GENSIM', ncores=1, runtime=(56,00), mode='resubmit')
+#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='DR', ncores=2, runtime=(20,00), mode='new')
+#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='DR', ncores=2, runtime=(5,00), mode='resubmit')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='HLT', ncores=8, runtime=(10,00), mode='new')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='HLT', ncores=8, runtime=(10,00), mode='resubmit')
 # EventGenerator_lqlq_sm.RemoveSamples(generation_step='DR')
-#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='AOD', ncores=4, runtime=(10,00), mode='new')
-#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='AOD', ncores=4, runtime=(10,00), mode='resubmit')
-#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='MINIAOD', ncores=2, runtime=(5,00), mode='new')
+#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='AOD', ncores=2, runtime=(2,00), mode='new')
+#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='AOD', ncores=2, runtime=(3,00), mode='resubmit')
+#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='MINIAOD', ncores=2, runtime=(3,00), mode='new')
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='MINIAOD', ncores=2, runtime=(5,00), mode='resubmit')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='NANOAOD', ncores=1, runtime=(1,00), mode='new')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='NANOAOD', ncores=1, runtime=(1,00), mode='resubmit')
