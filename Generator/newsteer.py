@@ -10,6 +10,7 @@ import importlib
 from utils import *
 from functions import *
 from constants import *
+import argparse
 
 import ROOT
 from ROOT import gROOT, gStyle, gPad, TLegend, TFile, TCanvas, Double, TF1, TH2D, TGraph, TGraph2D, TGraphAsymmErrors, TLine,\
@@ -24,6 +25,13 @@ import tdrstyle_all as TDR
 
 from CrossSectionRunner import *
 from GensimRunner import *
+
+parser = argparse.ArgumentParser(description='newsteer.py')
+
+parser.add_argument('-d','--dry', action = 'store_true', help = 'Run in dry mode (just displaying WP but not creating workspaces)')
+parser.add_argument('-p','--noproxy', action = 'store_true', help = 'Do not renew voms proxy.')
+
+options = parser.parse_args()
 
 processName = []
 n_batches = 1 # number of batches with nevents each
@@ -172,10 +180,11 @@ folderstructure = {
 ensureDirectory(workdir_slurm)
 
 
-os.system("voms-proxy-init  --voms cms --valid 200:00:00")
+if (not options.noproxy): 
+    os.system("voms-proxy-init  --voms cms --valid 200:00:00")
 
 
-submit = True
+submit = not options.dry
 
 
 
