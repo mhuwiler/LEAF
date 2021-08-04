@@ -163,15 +163,15 @@ class GensimRunner:
             if mode is 'new':
                 indices = range(self.maxindex)
             elif mode is 'resubmit':
-                print green('--> Now checking for missing files on T2 for generation step \'%s\' of job \'%s\'...' % (generation_step, jobname))
-                indices = missing_indices = findMissingFilesT2(filepath=self.T2_director+self.T2_path+'/'+self.folderstructure[generation_step]['pathtag']+'/'+jobname, filename_base=self.folderstructure[generation_step]['outfilenamebase'], maxindex=self.maxindex, gensimfolder=self.gensimfolder, generation_step=generation_step)
+                print green('--> Now checking for missing files on T3 for generation step \'%s\' of job \'%s\'...' % (generation_step, jobname))
+                indices = missing_indices = findMissingFilesT3(filepath=self.T3_path+'/'+self.folderstructure[generation_step]['pathtag']+'/'+jobname, filename_base=self.folderstructure[generation_step]['outfilenamebase'], maxindex=self.maxindex, generation_step=generation_step)
 
             njobs = 0
             for i in indices:
                 outfilename = '%s_%i.root' % (self.folderstructure[generation_step]['outfilenamebase'], i+1)
                 command = ''
                 if generation_step is not 'GENSIM':
-                    infilename   = self.T2_director+self.T2_path+'/'+self.folderstructure[generation_step]['infilepathtag']+'/'+jobname+'/%s_%i.root' % (self.folderstructure[generation_step]['infilenamebase'], i+1)
+                    infilename   = self.T3_director+self.T3_path+'/'+self.folderstructure[generation_step]['infilepathtag']+'/'+jobname+'/%s_%i.root' % (self.folderstructure[generation_step]['infilenamebase'], i+1)
                     command = getcmsRunCommand(pset=self.folderstructure[generation_step]['pset'], infilename=infilename, outfilename=outfilename, N=-1, ncores=ncores)
                 else:
                     infilename   = ""
@@ -185,7 +185,7 @@ class GensimRunner:
             if mode is 'new':        slurmjobname = '%s' % (self.folderstructure[generation_step]['jobnametag'])
             elif mode is 'resubmit': slurmjobname = 'resubmit_%s' % (self.folderstructure[generation_step]['jobnametag'])
             # jobs_per_sample_string = '%10' if mode == 'new' else ''
-            command = 'sbatch -a 1-%s -J %s -p %s -t %s --cpus-per-task %i --exclude t3wn[49,50,54,40,44,39] submit_cmsRun_command.sh %s %s %s %s %s' % (str(njobs), slurmjobname+'_'+jobname, queue, runtime_str, ncores, self.gensimfolder, self.arch_tag, self.workarea+'/'+self.folderstructure[generation_step]['cmsswtag'], self.T2_director+self.T2_path+'/'+self.folderstructure[generation_step]['pathtag']+'/'+jobname, commandfilename)
+            command = 'sbatch -a 1-%s -J %s -p %s -t %s --cpus-per-task %i --exclude t3wn[49,50,54,40,44,39] submit_cmsRun_command.sh %s %s %s %s %s' % (str(njobs), slurmjobname+'_'+jobname, queue, runtime_str, ncores, self.gensimfolder, self.arch_tag, self.workarea+'/'+self.folderstructure[generation_step]['cmsswtag'], self.T3_director+self.T3_path+'/'+self.folderstructure[generation_step]['pathtag']+'/'+jobname, commandfilename)
             if njobs > 0:
                 if self.submit:
                     # print command
@@ -241,7 +241,7 @@ class GensimRunner:
 
                     njobs = 0
                     for i in indices:
-                        infilename = self.T2_director_root + self.T2_path + '/' + self.folderstructure[generation_step]['infilepathtag'] + '/' + jobname + '/' + self.folderstructure[generation_step]['infilenamebase'] + '_' + str(i+1) + '.root'
+                        infilename = self.T3_director_root + self.T3_path + '/' + self.folderstructure[generation_step]['infilepathtag'] + '/' + jobname + '/' + self.folderstructure[generation_step]['infilenamebase'] + '_' + str(i+1) + '.root'
                         outfilename = self.folderstructure[generation_step]['outfilenamebase'] + '_%i.root' % (i+1)
                         command = '%s %s %s' % (self.folderstructure[generation_step]['tuplizer'], infilename, outfilename)
                         f.write(command + '\n')
@@ -277,7 +277,7 @@ class GensimRunner:
                 for lamb in self.lambdas:
                     mlq, mps, mch = get_mlq_mps_mch(preferred_configurations=self.preferred_configurations, config=config)
                     jobname       = get_jobname(processname=processname, mlq=mlq, mps=mps, mch=mch, lamb=lamb, tag=self.tag)
-                    samplepath    = self.T2_director+self.T2_path+'/'+self.folderstructure[generation_step]['pathtag']+'/'+jobname
+                    samplepath    = self.T3_director+self.T3_path+'/'+self.folderstructure[generation_step]['pathtag']+'/'+jobname
                     command       = 'LD_LIBRARY_PATH=\'\' PYTHONPATH=\'\' gfal-rm -r %s' % (samplepath)
                     # print command
                     if self.submit:

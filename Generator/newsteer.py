@@ -36,7 +36,7 @@ options = parser.parse_args()
 processName = []
 n_batches = 1 # number of batches with nevents each
 n_start = 0 # change this to the number of existing batches if you want to generate more events at a later point
-procname_base = 'ProductionTauhTestB0bar'
+procname_base = 'ProductionTauhB0bar'
 for idx in range(n_start, n_batches):
     processName.append('_'.join([procname_base, str(idx)]))
 print processName
@@ -64,8 +64,8 @@ lambdas_psipsi  = [1.0] # to reasonable precision, the Psi->LQ+DM decay kinemati
 
 
 tag = ''                # tags are auto-formatted to '_XXXX'
-maxindex        = 100 #4000   # Number of samples per configuration #TODO: put here 1000
-nevents         = 10000  # Events per sample
+maxindex        = 1000 #4000   # Number of samples per configuration #TODO: put here 1000
+nevents         = 300000  # Events per sample
 
 
 username       =  os.environ['USER']
@@ -89,7 +89,7 @@ T2_director      = 'gsiftp://storage01.lcg.cscs.ch/'
 T2_director_root = 'root://storage01.lcg.cscs.ch/'
 T3_director      = 'root://t3dcachedb03.psi.ch/'
 T2_path          = '/pnfs/lcg.cscs.ch/cms/trivcat/store/user/'+ username
-T3_path          = '/pnfs/psi.ch/cms/trivcat/store/user/LEAF/'+ username
+T3_path          = '/pnfs/psi.ch/cms/trivcat/store/user/'+ username +"/LEAF"
 tuple_path       = workarea + '/Tuples/' + campaign + '/GENSIM/ChiPsi'
 
 
