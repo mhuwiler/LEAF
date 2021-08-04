@@ -36,7 +36,7 @@ options = parser.parse_args()
 processName = []
 n_batches = 1 # number of batches with nevents each
 n_start = 0 # change this to the number of existing batches if you want to generate more events at a later point
-procname_base = 'ProductionTauhTestFullProd'
+procname_base = 'ProductionTauhTestB0bar'
 for idx in range(n_start, n_batches):
     processName.append('_'.join([procname_base, str(idx)]))
 print processName
@@ -64,8 +64,8 @@ lambdas_psipsi  = [1.0] # to reasonable precision, the Psi->LQ+DM decay kinemati
 
 
 tag = ''                # tags are auto-formatted to '_XXXX'
-maxindex        = 1000 #4000   # Number of samples per configuration #TODO: put here 1000
-nevents         = 300000  # Events per sample
+maxindex        = 100 #4000   # Number of samples per configuration #TODO: put here 1000
+nevents         = 10000  # Events per sample
 
 
 username       =  os.environ['USER']
@@ -89,14 +89,14 @@ T2_director      = 'gsiftp://storage01.lcg.cscs.ch/'
 T2_director_root = 'root://storage01.lcg.cscs.ch/'
 T3_director      = 'root://t3dcachedb03.psi.ch/'
 T2_path          = '/pnfs/lcg.cscs.ch/cms/trivcat/store/user/'+ username
-T3_path          = '/pnfs/psi.ch/cms/trivcat/store/user/'+ username
+T3_path          = '/pnfs/psi.ch/cms/trivcat/store/user/LEAF/'+ username
 tuple_path       = workarea + '/Tuples/' + campaign + '/GENSIM/ChiPsi'
 
 
 
 folderstructure = {
     'GENSIM': {
-        'pset':            psetfolder+'/BPH-RunIIFall18GS-BtoDstarTauNuSig_cfg.py',
+        'pset':            psetfolder+'/BPH-RunIIFall18GS-BtoDstarTauNuSigB0bar_cfg.py',
         'cmsswtag':        cmssw_tag,
         'jobnametag':      'gensim',
         'outfilenamebase': 'GENSIM',
@@ -193,16 +193,16 @@ EventGenerator_lqlq_sm = GensimRunner(processnames=processName, tag=tag, workdir
 # EventGenerator_lqlq_sm.SubmitGridpacks()
 # EventGenerator_lqlq_sm.MoveGridpacks()
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='GENSIM', ncores=1, runtime=(12,00), mode='new') # could in principle be decreased by a factor 4 (or the num of events per job increased)
-#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='GENSIM', ncores=1, runtime=(12,00), mode='resubmit') #168
+EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='GENSIM', ncores=1, runtime=(12,00), mode='resubmit') #168
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='DR', ncores=4, runtime=(12,00), mode='new')
-EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='DR', ncores=1, runtime=(20,00), mode='resubmit')
+#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='DR', ncores=1, runtime=(20,00), mode='resubmit')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='HLT', ncores=8, runtime=(10,00), mode='new')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='HLT', ncores=8, runtime=(10,00), mode='resubmit')
 # EventGenerator_lqlq_sm.RemoveSamples(generation_step='DR')
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='AOD', ncores=2, runtime=(12,00), mode='new')
-EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='AOD', ncores=4, runtime=(12,00), mode='resubmit')
+#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='AOD', ncores=4, runtime=(12,00), mode='resubmit')
 #EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='MINIAOD', ncores=2, runtime=(12,00), mode='new')
-EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='MINIAOD', ncores=2, runtime=(12,00), mode='resubmit')
+#EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='MINIAOD', ncores=2, runtime=(12,00), mode='resubmit')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='NANOAOD', ncores=1, runtime=(1,00), mode='new')
 # EventGenerator_lqlq_sm.SubmitGenerationStep(generation_step='NANOAOD', ncores=1, runtime=(1,00), mode='resubmit')
 
